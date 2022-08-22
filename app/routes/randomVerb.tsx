@@ -4,6 +4,7 @@ import { Form, useLoaderData } from "@remix-run/react";
 import { getConjugation } from "french-verbs";
 import { VerbsInfo } from "french-verbs-lefff";
 import Lefff from "french-verbs-lefff/dist/conjugations.json";
+import ActionButton from "~/components/ActionButton";
 import TargetWord from "~/components/TargetWord";
 
 function randomChoice(arr: any[]) {
@@ -55,6 +56,10 @@ export default function RandomVerbForm() {
           autoFocus
         ></input>
       </div>
+
+      <ActionButton>
+        <input type="submit" value="Abschicken" />
+      </ActionButton>
     </Form>
   );
 }

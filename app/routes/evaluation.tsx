@@ -1,5 +1,6 @@
 import { LoaderFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
+import ActionButton from "~/components/ActionButton";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url);
@@ -29,9 +30,9 @@ export default function Right() {
       ) : (
         <h1 className="text-3xl text-green-400">Korrekt!</h1>
       )}
-      <div className="text-orange-500 rounded-full mt-2">
+      <ActionButton>
         <Link to="/randomVerb">Nächstes Verb</Link>
-      </div>
+      </ActionButton>
     </div>
   );
 }
