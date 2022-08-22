@@ -3,19 +3,27 @@ import { Link, useLoaderData } from "@remix-run/react";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url);
-  return url.searchParams.get("actual");
+  return {
+    answer: (url.searchParams.get("answer") || "").toLowerCase(),
+    correct: (url.searchParams.get("correct") || "").toLowerCase(),
+  };
 };
 
 export default function Right() {
-  const correctAnswer = useLoaderData();
+  const { answer, correct } = useLoaderData();
 
   return (
     <div className="text-center">
-      {!!correctAnswer ? (
+      {correct !== answer ? (
         <>
           <h1 className="text-3xl text-red-500">Falsch</h1>
           <div className="mt-2">
-            Richtig war: <span className="font-extrabold">{correctAnswer}</span>
+            Deine Antwort:{" "}
+            <span className="font-extrabold text-red-300">{answer}</span>
+          </div>
+          <div className="mt-2">
+            Richtig war:{" "}
+            <span className="font-extrabold text-green-500">{correct}</span>
           </div>
         </>
       ) : (

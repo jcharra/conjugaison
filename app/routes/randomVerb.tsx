@@ -80,7 +80,5 @@ export const action: ActionFunction = async ({ request }) => {
     false
   );
 
-  return redirect(
-    `evaluation?actual=${answer === correctAnswer ? "" : correctAnswer}`
-  );
+  return redirect(`evaluation?answer=${answer}&correct=${correctAnswer}`);
 };
