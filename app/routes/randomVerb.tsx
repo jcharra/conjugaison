@@ -26,6 +26,24 @@ function getRandomPerson() {
   return Math.floor(Math.random() * 6);
 }
 
+function appendChar(verb: string) {
+  const input: HTMLInputElement = document.getElementById(
+    "answer"
+  ) as HTMLInputElement;
+  const currentVal = input.value;
+  console.log("Value:", currentVal);
+
+  if (!currentVal) {
+    const nextChar = verb.charAt(0);
+    input.value = currentVal + nextChar;
+  } else if (verb.startsWith(currentVal) && verb !== currentVal) {
+    const nextChar = verb.charAt(currentVal.length);
+    input.value = currentVal + nextChar;
+  }
+
+  input.focus();
+}
+
 export const loader: LoaderFunction = async () => {
   return {
     randomVerb: getRandomVerb(),
@@ -45,7 +63,7 @@ export default function RandomVerbForm() {
       <input type="hidden" name="tense" value={randomTense} />
       <input type="hidden" name="verb" value={randomVerb} />
 
-      <div className="mt-3">
+      <div className="mt-3 mr-2">
         <input
           autoComplete="off"
           autoCapitalize="off"
@@ -54,7 +72,14 @@ export default function RandomVerbForm() {
           type="text"
           name="answer"
           autoFocus
+          id="answer"
         ></input>
+        <div
+          onClick={() => appendChar(randomVerb)}
+          className="bg-green-400 rounded-full py-2 px-3 w-60px text-white inline ml-2 font-extrabold"
+        >
+          +
+        </div>
       </div>
 
       <ActionButton>
