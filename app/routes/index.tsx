@@ -1,4 +1,5 @@
 import { Link } from "@remix-run/react";
+import ActionButton from "~/components/ActionButton";
 
 export default function Index() {
   return (
@@ -7,12 +8,9 @@ export default function Index() {
       <div className="p-5">
         Trainiere Deine französischen Konjugations-Skills
       </div>
-      <Link
-        className="rounded-full bg-blue-600 text-white p-3"
-        to="/randomVerb"
-      >
-        Training starten
-      </Link>
+      <ActionButton>
+        <Link to="/randomVerb">Training starten</Link>
+      </ActionButton>
     </div>
   );
 }
