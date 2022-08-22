@@ -1,6 +1,6 @@
-import type { ActionFunction } from "@remix-run/node";
+import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { Form } from "@remix-run/react";
+import { Form, useLoaderData } from "@remix-run/react";
 import { getConjugation } from "french-verbs";
 import { VerbsInfo } from "french-verbs-lefff";
 import Lefff from "french-verbs-lefff/dist/conjugations.json";
@@ -25,10 +25,16 @@ function getRandomPerson() {
   return Math.floor(Math.random() * 6);
 }
 
+export const loader: LoaderFunction = async () => {
+  return {
+    randomVerb: getRandomVerb(),
+    randomTense: getRandomTense(),
+    randomPerson: getRandomPerson(),
+  };
+};
+
 export default function RandomVerbForm() {
-  const randomVerb = getRandomVerb();
-  const randomTense = getRandomTense();
-  const randomPerson = getRandomPerson();
+  const { randomVerb, randomTense, randomPerson } = useLoaderData();
 
   return (
     <Form method="post">
@@ -40,7 +46,10 @@ export default function RandomVerbForm() {
 
       <div className="mt-3">
         <input
-          className="rounded-md border-2 w-300px p-2"
+          autoComplete="off"
+          autoCapitalize="off"
+          maxLength={25}
+          className="rounded-md border-2 w-350px p-2"
           type="text"
           name="answer"
           autoFocus
