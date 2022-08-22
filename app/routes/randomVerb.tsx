@@ -80,5 +80,9 @@ export const action: ActionFunction = async ({ request }) => {
     false
   );
 
-  return redirect(`evaluation?answer=${answer}&correct=${correctAnswer}`);
+  return redirect(
+    `evaluation?answer=${encodeURIComponent(
+      answer as string
+    )}&correct=${encodeURIComponent(correctAnswer as string)}`
+  );
 };
