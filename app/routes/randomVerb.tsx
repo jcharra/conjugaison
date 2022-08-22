@@ -1,6 +1,6 @@
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { Form, useLoaderData } from "@remix-run/react";
+import { Form, useLoaderData, useTransition } from "@remix-run/react";
 import { getConjugation } from "french-verbs";
 import { VerbsInfo } from "french-verbs-lefff";
 import Lefff from "french-verbs-lefff/dist/conjugations.json";
@@ -54,6 +54,7 @@ export const loader: LoaderFunction = async () => {
 
 export default function RandomVerbForm() {
   const { randomVerb, randomTense, randomPerson } = useLoaderData();
+  const transition = useTransition();
 
   return (
     <Form method="post">
@@ -76,14 +77,18 @@ export default function RandomVerbForm() {
         ></input>
         <div
           onClick={() => appendChar(randomVerb)}
-          className="bg-green-400 rounded-full py-2 px-3 w-60px text-white inline ml-2 font-extrabold"
+          className="bg-green-400 rounded-full py-2 px-3 w-60px text-white inline ml-2 font-extrabold hover:bg-green-600 cursor-pointer"
         >
           +
         </div>
       </div>
 
       <ActionButton>
-        <input type="submit" value="Abschicken" />
+        <input
+          type="submit"
+          value={transition.state !== "submitting" ? "Abschicken" : "Warte ..."}
+          disabled={transition.state === "submitting"}
+        />
       </ActionButton>
     </Form>
   );
