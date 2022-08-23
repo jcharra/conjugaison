@@ -15,7 +15,12 @@ function getRandomTense() {
   // PRESENT, FUTUR, IMPARFAIT, PASSE_SIMPLE, CONDITIONNEL_PRESENT,
   // IMPERATIF_PRESENT, SUBJONCTIF_PRESENT, SUBJONCTIF_IMPARFAIT,
   // PASSE_COMPOSE, PLUS_QUE_PARFAIT
-  return randomChoice(["PRESENT", "FUTUR", "IMPARFAIT"]);
+  return randomChoice([
+    "PRESENT",
+    "FUTUR",
+    "IMPARFAIT",
+    "CONDITIONNEL_PRESENT",
+  ]);
 }
 
 function getRandomVerb() {
