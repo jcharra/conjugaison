@@ -4,6 +4,7 @@ import { Form, useLoaderData, useTransition } from "@remix-run/react";
 import { getConjugation } from "french-verbs";
 import { VerbsInfo } from "french-verbs-lefff";
 import Lefff from "french-verbs-lefff/dist/conjugations.json";
+import { useState } from "react";
 import ActionButton from "~/components/ActionButton";
 import TargetWord from "~/components/TargetWord";
 
@@ -50,11 +51,11 @@ export const loader: LoaderFunction = async () => {
 export default function RandomVerbForm() {
   const { randomVerb, randomTense, randomPerson } = useLoaderData();
   const transition = useTransition();
+  const [input, setInput] = useState("");
 
   return (
-    <Form method="post">
+    <Form method="post" onSubmit={(e) => !input && e.preventDefault()}>
       <TargetWord verb={randomVerb} tense={randomTense} person={randomPerson} />
-
       <input type="hidden" name="person" value={randomPerson} />
       <input type="hidden" name="tense" value={randomTense} />
       <input type="hidden" name="verb" value={randomVerb} />
@@ -75,14 +76,14 @@ export default function RandomVerbForm() {
           name="answer"
           autoFocus
           id="answer"
+          onChange={(e) => setInput(e.target.value)}
         ></input>
       </div>
-
-      <ActionButton>
+      <ActionButton disabled={!input}>
         <input
           type="submit"
-          value={transition.state !== "submitting" ? "Abschicken" : "Warte ..."}
-          disabled={transition.state === "submitting"}
+          value={transition.state === "idle" ? "Abschicken" : "Warte ..."}
+          disabled={transition.state !== "idle"}
         />
       </ActionButton>
     </Form>
