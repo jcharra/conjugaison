@@ -28,7 +28,7 @@ export default function Right() {
           </div>
         </>
       ) : (
-        <h1 className="text-3xl text-green-400">Korrekt!</h1>
+        <h1 className="text-3xl text-green-400">Korrekt</h1>
       )}
       <ActionButton>
         <Link to="/randomVerb">Nächstes Verb</Link>

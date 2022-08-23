@@ -26,21 +26,11 @@ function getRandomPerson() {
   return Math.floor(Math.random() * 6);
 }
 
-function appendChar(verb: string) {
+function copyVerbIntoInput(verb: string) {
   const input: HTMLInputElement = document.getElementById(
     "answer"
   ) as HTMLInputElement;
-  const currentVal = input.value;
-  console.log("Value:", currentVal);
-
-  if (!currentVal) {
-    const nextChar = verb.charAt(0);
-    input.value = currentVal + nextChar;
-  } else if (verb.startsWith(currentVal) && verb !== currentVal) {
-    const nextChar = verb.charAt(currentVal.length);
-    input.value = currentVal + nextChar;
-  }
-
+  input.value = verb;
   input.focus();
 }
 
@@ -64,23 +54,23 @@ export default function RandomVerbForm() {
       <input type="hidden" name="tense" value={randomTense} />
       <input type="hidden" name="verb" value={randomVerb} />
 
-      <div className="mt-3 mr-2">
+      <div className="mt-3 ml-2 mr-14">
+        <div
+          onClick={() => copyVerbIntoInput(randomVerb)}
+          className="py-1 px-3 text-gray-400 inline ml-1 font-extrabold hover:text-gray-700 cursor-pointer text-3xl"
+        >
+          &#x2398;
+        </div>
         <input
           autoComplete="off"
           autoCapitalize="off"
           maxLength={25}
-          className="rounded-md border-2 w-350px p-2"
+          className="rounded-md border-2 w-30 p-2"
           type="text"
           name="answer"
           autoFocus
           id="answer"
         ></input>
-        <div
-          onClick={() => appendChar(randomVerb)}
-          className="bg-green-400 rounded-full py-2 px-3 w-60px text-white inline ml-2 font-extrabold hover:bg-green-600 cursor-pointer"
-        >
-          +
-        </div>
       </div>
 
       <ActionButton>
