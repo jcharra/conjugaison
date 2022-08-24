@@ -3,7 +3,12 @@ import { Form, useLoaderData } from "@remix-run/react";
 import { useCallback, useState } from "react";
 import ActionButton from "~/components/ActionButton";
 import { userSettings } from "~/cookies";
-import { getSettingsFromRequest, TENSES, UserSettings } from "~/dataprovider";
+import {
+  DISPLAY_NAME_FOR_TENSE,
+  getSettingsFromRequest,
+  TENSES,
+  UserSettings,
+} from "~/dataprovider";
 
 export const loader: LoaderFunction = async ({ request }) => {
   return getSettingsFromRequest(request);
@@ -42,27 +47,49 @@ export default function Settings() {
   );
 
   return (
-    <div>
-      <h1 className="text-3xl mb-4">Einstellungen</h1>
-      <Form method="post">
-        <div>
-          {TENSES.map((t) => (
-            <div className="my-1" key={t}>
-              <input
-                type="checkbox"
-                name={t}
-                id={t}
-                checked={activeTenses.indexOf(t) >= 0}
-                onChange={() => toggleTense(t)}
-              />{" "}
-              <label htmlFor={t}>{t}</label>
-            </div>
-          ))}
-        </div>
-        <ActionButton>
-          <input type="submit" value="Speichern" />
-        </ActionButton>
-      </Form>
-    </div>
+    <>
+      <div>
+        <h1 className="text-3xl mb-4">Einstellungen</h1>
+      </div>
+      <div className="text-left">
+        <Form
+          method="post"
+          onSubmit={(e) => !activeTenses.length && e.preventDefault()}
+        >
+          <div>
+            {TENSES.map((t) => (
+              <div className="my-1" key={t}>
+                <input
+                  type="checkbox"
+                  name={t}
+                  id={t}
+                  checked={activeTenses.indexOf(t) >= 0}
+                  onChange={() => toggleTense(t)}
+                />{" "}
+                <label htmlFor={t}>{DISPLAY_NAME_FOR_TENSE.get(t) || t}</label>
+              </div>
+            ))}
+          </div>
+          <div className="my-4">
+            <span
+              className="mr-4 underline"
+              onClick={() => setActiveTenses(TENSES)}
+            >
+              Alle wählen
+            </span>{" "}
+            <span className="underline" onClick={() => setActiveTenses([])}>
+              Alle entfernen
+            </span>
+          </div>
+          <ActionButton disabled={!activeTenses.length}>
+            <input
+              type="submit"
+              value="Speichern"
+              disabled={!activeTenses.length}
+            />
+          </ActionButton>
+        </Form>
+      </div>
+    </>
   );
 }

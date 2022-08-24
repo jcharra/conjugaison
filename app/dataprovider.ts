@@ -21,6 +21,19 @@ export const TENSES = [
   "PLUS_QUE_PARFAIT",
 ];
 
+export const DISPLAY_NAME_FOR_TENSE: Map<string, string> = new Map([
+  ["PRESENT", "Présent"],
+  ["FUTUR", "Futur"],
+  ["IMPARFAIT", "Imparfait"],
+  ["CONDITIONNEL_PRESENT", "Conditionnel"],
+  ["SUBJONCTIF_PRESENT", "Subjonctif présent"],
+  ["PASSE_SIMPLE", "Passé simple"],
+  ["IMPERATIF_PRESENT", "Impératif"],
+  ["SUBJONCTIF_IMPARFAIT", "Subjonctif imparfait"],
+  ["PASSE_COMPOSE", "Passé composé"],
+  ["PLUS_QUE_PARFAIT", "Plus-que-parfait"],
+]);
+
 export function getRandomTense(tenses: string[]) {
   return randomChoice(tenses);
 }

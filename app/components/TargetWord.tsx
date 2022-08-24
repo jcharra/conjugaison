@@ -1,3 +1,5 @@
+import { DISPLAY_NAME_FOR_TENSE } from "~/dataprovider";
+
 interface TargetWordProps {
   verb: string;
   tense: string;
@@ -5,22 +7,13 @@ interface TargetWordProps {
 }
 
 const pronouns = ["Je", "Tu", "Il/Elle", "Nous", "Vous", "Ils/Elles"];
-const displayNameTense: Map<string, string> = new Map([
-  ["CONDITIONNEL_PRESENT", "CONDITIONNEL PRESENT"],
-  ["SUBJONCTIF_PRESENT", "SUBJONCTIF PRESENT"],
-  ["PASSE_SIMPLE", "PASSE SIMPLE"],
-  ["IMPERATIF_PRESENT", "IMPERATIF PRESENT"],
-  ["SUBJONCTIF_IMPARFAIT", "SUBJONCTIF IMPARFAIT"],
-  ["PASSE_COMPOSE", "PASSE COMPOSE"],
-  ["PLUS_QUE_PARFAIT", "PLUS QUE PARFAIT"],
-]);
 
 export default function TargetWord({ verb, tense, person }: TargetWordProps) {
   return (
     <>
       <div className="text-3xl mb-2 border-lime-100">{verb}</div>
       <div className="text-green-400 font-extrabold">
-        {displayNameTense.get(tense) || tense}
+        {DISPLAY_NAME_FOR_TENSE.get(tense) || tense}
       </div>
 
       <div>

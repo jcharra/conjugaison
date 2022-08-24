@@ -27,7 +27,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className="text-center p-5">
+      <body className="flex items-center justify-center flex-col p-5">
         <Outlet />
         <ScrollRestoration />
         <Scripts />

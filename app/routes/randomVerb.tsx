@@ -36,7 +36,11 @@ export default function RandomVerbForm() {
   const [input, setInput] = useState("");
 
   return (
-    <Form method="post" onSubmit={(e) => !input && e.preventDefault()}>
+    <Form
+      className="text-center"
+      method="post"
+      onSubmit={(e) => !input && e.preventDefault()}
+    >
       <TargetWord verb={randomVerb} tense={randomTense} person={randomPerson} />
       <input type="hidden" name="person" value={randomPerson} />
       <input type="hidden" name="tense" value={randomTense} />
