@@ -62,7 +62,7 @@ export async function getSettingsFromRequest(
   const cookieHeader = request.headers.get("Cookie");
   const cookie = (await userSettings.parse(cookieHeader)) || {};
 
-  if (!cookie || !isUserSettings(cookie.settings)) {
+  if (!cookie || !cookie.settings || !isUserSettings(cookie.settings)) {
     console.log("No settings found in", cookie);
     return defaultSettings;
   }
