@@ -7,6 +7,12 @@ interface TargetWordProps {
 const pronouns = ["Je", "Tu", "Il/Elle", "Nous", "Vous", "Ils/Elles"];
 const displayNameTense: Map<string, string> = new Map([
   ["CONDITIONNEL_PRESENT", "CONDITIONNEL PRESENT"],
+  ["SUBJONCTIF_PRESENT", "SUBJONCTIF PRESENT"],
+  ["PASSE_SIMPLE", "PASSE SIMPLE"],
+  ["IMPERATIF_PRESENT", "IMPERATIF PRESENT"],
+  ["SUBJONCTIF_IMPARFAIT", "SUBJONCTIF IMPARFAIT"],
+  ["PASSE_COMPOSE", "PASSE COMPOSE"],
+  ["PLUS_QUE_PARFAIT", "PLUS QUE PARFAIT"],
 ]);
 
 export default function TargetWord({ verb, tense, person }: TargetWordProps) {

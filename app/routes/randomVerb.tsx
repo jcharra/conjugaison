@@ -1,36 +1,16 @@
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { Form, useLoaderData, useTransition } from "@remix-run/react";
-import { getConjugation } from "french-verbs";
-import { VerbsInfo } from "french-verbs-lefff";
-import Lefff from "french-verbs-lefff/dist/conjugations.json";
+import { Form, Link, useLoaderData, useTransition } from "@remix-run/react";
+import {
+  getRandomVerb,
+  getRandomTense,
+  getRandomPerson,
+  getConjugatedForm,
+  getSettingsFromRequest,
+} from "~/dataprovider";
 import { useState } from "react";
 import ActionButton from "~/components/ActionButton";
 import TargetWord from "~/components/TargetWord";
-
-function randomChoice(arr: any[]) {
-  return arr[Math.floor(arr.length * Math.random())];
-}
-
-function getRandomTense() {
-  // PRESENT, FUTUR, IMPARFAIT, PASSE_SIMPLE, CONDITIONNEL_PRESENT,
-  // IMPERATIF_PRESENT, SUBJONCTIF_PRESENT, SUBJONCTIF_IMPARFAIT,
-  // PASSE_COMPOSE, PLUS_QUE_PARFAIT
-  return randomChoice([
-    "PRESENT",
-    "FUTUR",
-    "IMPARFAIT",
-    "CONDITIONNEL_PRESENT",
-  ]);
-}
-
-function getRandomVerb() {
-  return randomChoice(Object.keys(Lefff));
-}
-
-function getRandomPerson() {
-  return Math.floor(Math.random() * 6);
-}
 
 function copyVerbIntoInput(verb: string) {
   const input: HTMLInputElement = document.getElementById(
@@ -40,10 +20,12 @@ function copyVerbIntoInput(verb: string) {
   input.focus();
 }
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction = async ({ request }) => {
+  const settings = await getSettingsFromRequest(request);
+
   return {
     randomVerb: getRandomVerb(),
-    randomTense: getRandomTense(),
+    randomTense: getRandomTense(settings.activeTenses),
     randomPerson: getRandomPerson(),
   };
 };
@@ -86,6 +68,12 @@ export default function RandomVerbForm() {
           disabled={transition.state !== "idle"}
         />
       </ActionButton>
+      <div className="mt-6 text-gray-400">
+        <span>&#9881;</span>
+        <Link className="text-sm ml-2" to="/settings">
+          Einstellungen
+        </Link>
+      </div>
     </Form>
   );
 }
@@ -94,22 +82,11 @@ export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
 
   const answer = formData.get("answer");
-  const verb = formData.get("verb");
-  const tense = formData.get("tense");
-  const person = formData.get("person");
+  const verb = formData.get("verb") as string;
+  const tense = formData.get("tense") as string;
+  const person = formData.get("person") as string;
 
-  const correctAnswer = getConjugation(
-    Lefff as VerbsInfo,
-    verb as string,
-    tense as string,
-    parseInt(person as string),
-    {
-      aux: "ETRE",
-      agreeGender: "F",
-      agreeNumber: "S",
-    },
-    false
-  );
+  const correctAnswer = getConjugatedForm(verb, tense, person);
 
   return redirect(
     `evaluation?answer=${encodeURIComponent(
