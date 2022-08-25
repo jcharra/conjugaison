@@ -101,6 +101,7 @@ export interface UserSettings {
   unitLength: number;
   unitStep: number;
   unitErrors: string[];
+  unitErrorsCorrected: string[];
 }
 
 const defaultSettings: UserSettings = {
@@ -109,6 +110,7 @@ const defaultSettings: UserSettings = {
   unitLength: 20,
   unitStep: 1,
   unitErrors: [],
+  unitErrorsCorrected: [],
 };
 
 export async function getSettingsFromRequest(

@@ -11,15 +11,21 @@ export const loader: LoaderFunction = async ({ request }) => {
   return {
     answer: (url.searchParams.get("answer") || "").toLowerCase(),
     correct: (url.searchParams.get("correct") || "").toLowerCase(),
-    stepsNeeded: settings.unitStep,
-    unitLength: settings.unitLength,
-    errors: settings.unitErrors,
+    settings: settings,
   };
 };
 
 export default function Right() {
-  const { answer, correct, stepsNeeded, unitLength, errors } = useLoaderData();
-  const finished = stepsNeeded >= unitLength && errors.length === 0;
+  const { answer, correct, settings } = useLoaderData();
+  const {
+    unitStep,
+    unitLength,
+    unitErrors,
+    unitErrorsCorrected,
+    untilNoErrors,
+  } = settings;
+  const finished =
+    unitStep >= unitLength && (unitErrors.length === 0 || !untilNoErrors);
 
   return (
     <div className="text-center">
@@ -38,17 +44,17 @@ export default function Right() {
       ) : (
         <h1 className="text-3xl text-green-400">Korrekt</h1>
       )}
-      {finished && (
-        <DisplayStats
-          stepsNeeded={stepsNeeded}
-          unitLength={unitLength}
-          errors={errors}
-        />
+      {finished ? (
+        <>
+          <DisplayStats
+            errors={unitErrors}
+            errorsCorrected={unitErrorsCorrected}
+          />
+          <LinkButton to="/" caption={"Training abschließen"} />
+        </>
+      ) : (
+        <LinkButton to="/training" caption={"Nächstes Verb"} />
       )}
-      <LinkButton
-        to="/training"
-        caption={!finished ? "Nächstes Verb" : "Training abschließen"}
-      />
     </div>
   );
 }

@@ -1,5 +1,24 @@
-import { Link } from "@remix-run/react";
-import LinkButton from "~/components/LinkButton";
+import { ActionFunction, redirect } from "@remix-run/node";
+import { Form, Link } from "@remix-run/react";
+import SubmitButton from "~/components/SubmitButton";
+import { userSettings } from "~/cookies";
+import { getSettingsFromRequest, writeRequestCookie } from "~/dataprovider";
+
+export const action: ActionFunction = async ({ request }) => {
+  const settings = await getSettingsFromRequest(request);
+  const resetCookie = await writeRequestCookie(request, {
+    ...settings,
+    unitStep: 1,
+    unitErrors: [],
+    unitErrorsCorrected: [],
+  });
+
+  return redirect("/training", {
+    headers: {
+      "Set-Cookie": await userSettings.serialize(resetCookie),
+    },
+  });
+};
 
 export default function Index() {
   return (
@@ -8,7 +27,9 @@ export default function Index() {
       <div className="p-5">
         Trainiere Deine französischen Konjugations-Skills
       </div>
-      <LinkButton to="/training" caption="Training starten" />
+      <Form method="post">
+        <SubmitButton caption="Training starten" />
+      </Form>
       <div className="mt-6 text-gray-400">
         <span>⚙</span>
         <Link className="text-sm ml-2" to="/settings">

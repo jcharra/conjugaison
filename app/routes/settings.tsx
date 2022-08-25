@@ -28,6 +28,7 @@ export const action: ActionFunction = async ({ request }) => {
   const updatedCookie = await writeRequestCookie(request, {
     unitStep: 1,
     unitErrors: [],
+    unitErrorsCorrected: [],
     activeTenses,
     unitLength,
     untilNoErrors,

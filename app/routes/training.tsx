@@ -1,7 +1,7 @@
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { Form, Link, useLoaderData, useTransition } from "@remix-run/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import SubmitButton from "~/components/SubmitButton";
 import TargetWord from "~/components/TargetWord";
 import VerbCounter from "~/components/VerbCounter";
@@ -34,17 +34,7 @@ export const loader: LoaderFunction = async ({ request }) => {
         randomPerson: person,
       };
     } else {
-      const updatedCookie = await writeRequestCookie(request, {
-        ...settings,
-        unitStep: 1,
-        unitErrors: [],
-      });
-
-      return redirect("/", {
-        headers: {
-          "Set-Cookie": await userSettings.serialize(updatedCookie),
-        },
-      });
+      return redirect("/");
     }
   }
 
@@ -68,6 +58,10 @@ export default function Training() {
     inputRef.current?.focus();
   }, [input]);
 
+  const addVerbToInput = useCallback(() => {
+    setInput((inp) => inp + randomVerb);
+  }, [input]);
+
   return (
     <>
       <VerbCounter step={unitStep} total={unitLength} />
@@ -83,7 +77,7 @@ export default function Training() {
 
         <div className="mt-3 ml-2 mr-14">
           <div
-            onClick={() => setInput(randomVerb)}
+            onClick={addVerbToInput}
             className="py-1 px-3 text-gray-400 inline ml-1 font-extrabold hover:text-gray-700 cursor-pointer text-3xl"
           >
             &#x2398;
@@ -100,12 +94,17 @@ export default function Training() {
             id="answer"
             value={input}
             onChange={(e) => {
-              setInput(e.target.value);
+              setInput(e.target.value.replace(".", ""));
+            }}
+            onKeyUp={(e) => {
+              if (e.key === "." && input.indexOf(randomVerb) === -1) {
+                addVerbToInput();
+              }
             }}
           ></input>
         </div>
         <SubmitButton
-          disabled={transition.state !== "idle"}
+          disabled={transition.state !== "idle" || !input || input.length === 0}
           caption={transition.state === "idle" ? "Abschicken" : "Warte ..."}
         />
         <div className="mt-6 text-gray-400">
@@ -132,17 +131,33 @@ export const action: ActionFunction = async ({ request }) => {
 
   let correctAnswer;
   let updatedErrors = settings.unitErrors;
+  let updatedErrorsCorrected = settings.unitErrorsCorrected;
+
   const encodedQuestion = encodeQuestion(verb, tense, person);
 
   if (correctAnswers.indexOf(answer) > -1) {
-    correctAnswer = answer;
+    // CORRECT ANSWER
 
-    if (settings.unitErrors.indexOf(encodedQuestion) > -1) {
-      updatedErrors = settings.unitErrors.filter((q) => q !== encodedQuestion);
+    if (updatedErrors.indexOf(encodedQuestion) > -1) {
+      updatedErrors = updatedErrors.filter((q) => q !== encodedQuestion);
+
+      if (updatedErrorsCorrected.indexOf(encodedQuestion) === -1) {
+        updatedErrorsCorrected = updatedErrorsCorrected.concat(encodedQuestion);
+      }
     }
+
+    correctAnswer = answer;
   } else {
-    if (settings.unitErrors.indexOf(encodedQuestion) === -1) {
+    // INCORRECT ANSWER
+
+    if (updatedErrors.indexOf(encodedQuestion) === -1) {
       updatedErrors = settings.unitErrors.concat(encodedQuestion);
+    }
+
+    if (updatedErrorsCorrected.indexOf(encodedQuestion) > -1) {
+      updatedErrorsCorrected = updatedErrorsCorrected.filter(
+        (e) => e !== encodedQuestion
+      );
     }
 
     correctAnswer = correctAnswers[0];
@@ -151,6 +166,7 @@ export const action: ActionFunction = async ({ request }) => {
   const updatedCookie = await writeRequestCookie(request, {
     ...settings,
     unitErrors: updatedErrors,
+    unitErrorsCorrected: updatedErrorsCorrected,
     unitStep: settings.unitStep + 1,
   });
 

@@ -3,7 +3,7 @@ export default function SubmitButton({
   disabled,
 }: {
   caption: string;
-  disabled: boolean;
+  disabled?: boolean;
 }) {
   return (
     <button
