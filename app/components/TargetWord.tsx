@@ -11,7 +11,9 @@ const pronouns = ["Je", "Tu", "Il/Elle", "Nous", "Vous", "Ils/Elles"];
 
 const startsWithVocal = (s: string) => {
   return (
-    ["a", "e", "i", "o", "u", "è", "é", "ê", "â", "û", "î"].indexOf(s[0]) > -1
+    ["a", "e", "i", "o", "u", "è", "é", "ê", "â", "û", "î", "ô", "y"].indexOf(
+      s[0]
+    ) > -1
   );
 };
 
