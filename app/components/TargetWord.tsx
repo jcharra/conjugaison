@@ -4,11 +4,29 @@ interface TargetWordProps {
   verb: string;
   tense: string;
   person: number;
+  currentInput: string;
 }
 
 const pronouns = ["Je", "Tu", "Il/Elle", "Nous", "Vous", "Ils/Elles"];
 
-export default function TargetWord({ verb, tense, person }: TargetWordProps) {
+const startsWithVocal = (s: string) => {
+  return (
+    ["a", "e", "i", "o", "u", "è", "é", "ê", "â", "û", "î"].indexOf(s[0]) > -1
+  );
+};
+
+export default function TargetWord({
+  verb,
+  tense,
+  person,
+  currentInput,
+}: TargetWordProps) {
+  let intro = pronouns[person];
+
+  if (person === 0 && startsWithVocal(currentInput)) {
+    intro = "J'";
+  }
+
   return (
     <>
       <div className="text-3xl mb-2 border-lime-100">{verb}</div>
@@ -19,7 +37,7 @@ export default function TargetWord({ verb, tense, person }: TargetWordProps) {
       <div>
         {(person % 3) + 1}. Person {person > 2 ? "Plural" : "Singular"}
       </div>
-      <div className="font-bold">{pronouns[person]} ...</div>
+      <div className="font-bold">{intro} ...</div>
     </>
   );
 }

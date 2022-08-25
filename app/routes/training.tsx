@@ -59,13 +59,20 @@ export default function Training() {
   }, [input]);
 
   const addVerbToInput = useCallback(() => {
-    setInput((inp) => inp + randomVerb);
+    if (input.indexOf(randomVerb) === -1) {
+      setInput((inp) => inp + randomVerb);
+    }
   }, [input]);
 
   return (
     <>
       <VerbCounter step={unitStep} total={unitLength} />
-      <TargetWord verb={randomVerb} tense={randomTense} person={randomPerson} />
+      <TargetWord
+        verb={randomVerb}
+        tense={randomTense}
+        person={randomPerson}
+        currentInput={input}
+      />
       <Form
         className="text-center"
         method="post"
