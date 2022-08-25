@@ -1,17 +1,17 @@
-export default function ActionButton({
+export default function SubmitButton({
+  caption,
   disabled,
-  children,
 }: {
-  disabled?: boolean;
-  children: JSX.Element;
+  caption: string;
+  disabled: boolean;
 }) {
   return (
-    <div
+    <button
       className={`mt-4 ${
         disabled ? " bg-gray-300" : "bg-blue-600 hover:bg-blue-800"
       } px-6 py-2 w-200px text-white rounded-full inline-block cursor-pointer`}
     >
-      {children}
-    </div>
+      <input type="submit" value={caption} disabled={disabled} />
+    </button>
   );
 }

@@ -1,30 +1,41 @@
 import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node";
 import { Form, useLoaderData } from "@remix-run/react";
 import { useCallback, useState } from "react";
-import ActionButton from "~/components/ActionButton";
+import SubmitButton from "~/components/SubmitButton";
 import { userSettings } from "~/cookies";
 import {
   DISPLAY_NAME_FOR_TENSE,
   getSettingsFromRequest,
   TENSES,
   UserSettings,
+  writeRequestCookie,
 } from "~/dataprovider";
+
+const MIN_UNIT_LENGTH = 1;
+const MAX_UNIT_LENGTH = 100;
 
 export const loader: LoaderFunction = async ({ request }) => {
   return getSettingsFromRequest(request);
 };
 
 export const action: ActionFunction = async ({ request }) => {
-  const cookieHeader = request.headers.get("Cookie");
-  const cookie = (await userSettings.parse(cookieHeader)) || {};
   const bodyParams = await request.formData();
 
   const activeTenses = TENSES.filter((t) => bodyParams.get(t) === "on");
-  cookie.settings = { activeTenses };
+  const unitLength = parseInt(bodyParams.get("unitLength") as string);
+  const untilNoErrors = bodyParams.get("untilNoErrors") === "on";
 
-  return redirect("/randomVerb", {
+  const updatedCookie = await writeRequestCookie(request, {
+    unitStep: 1,
+    unitErrors: [],
+    activeTenses,
+    unitLength,
+    untilNoErrors,
+  });
+
+  return redirect("/", {
     headers: {
-      "Set-Cookie": await userSettings.serialize(cookie),
+      "Set-Cookie": await userSettings.serialize(updatedCookie),
     },
   });
 };
@@ -32,6 +43,8 @@ export const action: ActionFunction = async ({ request }) => {
 export default function Settings() {
   const settings: UserSettings = useLoaderData();
   const [activeTenses, setActiveTenses] = useState(settings.activeTenses);
+  const [unitLength, setUnitLength] = useState(settings.unitLength);
+  const [untilNoErrors, setUntilNoErrors] = useState(settings.untilNoErrors);
 
   const toggleTense = useCallback(
     (val: string) => {
@@ -48,17 +61,17 @@ export default function Settings() {
 
   return (
     <>
-      <div>
-        <h1 className="text-3xl mb-4">Einstellungen</h1>
-      </div>
       <div className="text-left">
         <Form
           method="post"
           onSubmit={(e) => !activeTenses.length && e.preventDefault()}
         >
           <div>
+            <h2 className="text-2xl mb-4">Zeiten</h2>
+          </div>
+          <div>
             {TENSES.map((t) => (
-              <div className="my-1" key={t}>
+              <div className="my-2" key={t}>
                 <input
                   type="checkbox"
                   name={t}
@@ -81,13 +94,58 @@ export default function Settings() {
               Alle entfernen
             </span>
           </div>
-          <ActionButton disabled={!activeTenses.length}>
+          <div className="mt-8">
+            <h2 className="text-2xl mb-4">Training</h2>
+          </div>
+          <div className="mb-4">
+            <button
+              disabled={unitLength === MIN_UNIT_LENGTH}
+              className={
+                "bg-blue-600 hover:bg-blue-800 disabled:bg-gray-300 rounded-full px-3 py-1 mr-4 text-white font-extrabold inline cursor-pointer"
+              }
+              onClick={(e) => {
+                e.preventDefault();
+                setUnitLength((len) => Math.max(MIN_UNIT_LENGTH, len - 1));
+              }}
+            >
+              -
+            </button>
+            <div className="font-bold w-21 inline-block text-center">
+              {unitLength} {unitLength === 1 ? "Verb" : "Verben"}
+            </div>
+            <button
+              disabled={unitLength === MAX_UNIT_LENGTH}
+              className={
+                "bg-blue-600 hover:bg-blue-800 disabled:bg-gray-300 rounded-full px-3 py-1 ml-4 text-white font-extrabold inline cursor-pointer"
+              }
+              onClick={(e) => {
+                e.preventDefault();
+                setUnitLength((len) => Math.min(MAX_UNIT_LENGTH, len + 1));
+              }}
+            >
+              +
+            </button>
             <input
-              type="submit"
-              value="Speichern"
-              disabled={!activeTenses.length}
+              type="hidden"
+              name="unitLength"
+              id="unitLength"
+              value={unitLength}
             />
-          </ActionButton>
+          </div>
+          <div className="mb-6">
+            <input
+              type="checkbox"
+              name="untilNoErrors"
+              id="untilNoErrors"
+              checked={!!untilNoErrors}
+              onChange={() => setUntilNoErrors((val) => !val)}
+            />{" "}
+            <label htmlFor="untilNoErrors">
+              Fehler am Ende erneut abfragen
+            </label>
+          </div>
+
+          <SubmitButton disabled={!activeTenses.length} caption={"Speichern"} />
         </Form>
       </div>
     </>

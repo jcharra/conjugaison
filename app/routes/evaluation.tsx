@@ -1,17 +1,25 @@
 import { LoaderFunction } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
-import ActionButton from "~/components/ActionButton";
+import { useLoaderData } from "@remix-run/react";
+import DisplayStats from "~/components/DisplayStats";
+import LinkButton from "~/components/LinkButton";
+import { getSettingsFromRequest } from "~/dataprovider";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url);
+  const settings = await getSettingsFromRequest(request);
+
   return {
     answer: (url.searchParams.get("answer") || "").toLowerCase(),
     correct: (url.searchParams.get("correct") || "").toLowerCase(),
+    stepsNeeded: settings.unitStep,
+    unitLength: settings.unitLength,
+    errors: settings.unitErrors,
   };
 };
 
 export default function Right() {
-  const { answer, correct } = useLoaderData();
+  const { answer, correct, stepsNeeded, unitLength, errors } = useLoaderData();
+  const finished = stepsNeeded >= unitLength && errors.length === 0;
 
   return (
     <div className="text-center">
@@ -30,9 +38,17 @@ export default function Right() {
       ) : (
         <h1 className="text-3xl text-green-400">Korrekt</h1>
       )}
-      <ActionButton>
-        <Link to="/randomVerb">Nächstes Verb</Link>
-      </ActionButton>
+      {finished && (
+        <DisplayStats
+          stepsNeeded={stepsNeeded}
+          unitLength={unitLength}
+          errors={errors}
+        />
+      )}
+      <LinkButton
+        to="/training"
+        caption={!finished ? "Nächstes Verb" : "Training abschließen"}
+      />
     </div>
   );
 }
