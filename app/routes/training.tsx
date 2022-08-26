@@ -1,7 +1,7 @@
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { Form, Link, useLoaderData, useTransition } from "@remix-run/react";
-import { useEffect, useRef, useState, useCallback } from "react";
+import { Form, useLoaderData, useTransition } from "@remix-run/react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import HomeLink from "~/components/HomeLink";
 import SubmitButton from "~/components/SubmitButton";
 import TargetWord from "~/components/TargetWord";
@@ -39,13 +39,30 @@ export const loader: LoaderFunction = async ({ request }) => {
     }
   }
 
-  return {
-    unitStep: settings.unitStep,
-    unitLength: settings.unitLength,
-    randomVerb: getRandomVerb(),
-    randomTense: getRandomTense(settings.activeTenses),
-    randomPerson: getRandomPerson(),
-  };
+  while (true) {
+    const [verb, tense, person] = [
+      getRandomVerb(),
+      getRandomTense(settings.activeTenses),
+      getRandomPerson(),
+    ];
+
+    try {
+      const responses = getConjugatedForms(verb, tense, person + "");
+
+      if (responses && responses.length > 0 && responses[0]) {
+        return {
+          unitStep: settings.unitStep,
+          unitLength: settings.unitLength,
+          randomVerb: verb,
+          randomTense: tense,
+          randomPerson: person,
+        };
+      }
+    } catch (error: any) {
+      // e.g. "messeoir" has unavailable tense/person combinations
+      console.log("Found invalid responses. Retrying ...", error);
+    }
+  }
 };
 
 export default function Training() {
