@@ -58,8 +58,8 @@ function ErrorList({ items }: { items: string[] }) {
         return (
           <div>
             <span className="font-extrabold">{verb}</span>,{" "}
-            {DISPLAY_NAME_FOR_TENSE.get(tense)}, {(person % 3) + 1}. Person{" "}
-            {person > 2 ? "Plural" : "Singular"}:{" "}
+            {DISPLAY_NAME_FOR_TENSE.get(tense)}, {(person % 3) + 1}. personne{" "}
+            {person > 2 ? "pluriel" : "singulier"}:{" "}
             <span className="font-extrabold text-green-500">
               {PRONOUNS[person]}{" "}
               {getConjugatedForms(verb, tense, person + "")[0]}
