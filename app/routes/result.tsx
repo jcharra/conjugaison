@@ -31,7 +31,8 @@ export default function Result() {
         <span className="font-extrabold">
           {errorCount} {errorCount === 1 ? "erreur" : "erreurs"}
         </span>
-        .{errorCount === 0 && <span className="text-green-500">Bravo! 🥳</span>}
+        .{" "}
+        {errorCount === 0 && <span className="text-green-500">Bravo! 🥳</span>}
       </div>
       {unitErrorsCorrected.length > 0 && (
         <div>

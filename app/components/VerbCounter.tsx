@@ -10,7 +10,7 @@ export default function VerbCounter({
       {step <= total ? (
         `${step} / ${total}`
       ) : (
-        <span className="text-red-400">Korrektur</span>
+        <span className="text-red-400">Correction</span>
       )}
     </div>
   );

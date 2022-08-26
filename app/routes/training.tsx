@@ -113,7 +113,7 @@ export default function Training() {
         </div>
         <SubmitButton
           disabled={transition.state !== "idle" || !input || input.length === 0}
-          caption={transition.state === "idle" ? "Envoyer" : "Analyse ..."}
+          caption={transition.state === "idle" ? "Valider" : "Analyse ..."}
         />
         <HomeLink />
       </Form>
