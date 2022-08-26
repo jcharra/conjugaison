@@ -1,4 +1,4 @@
-import { DISPLAY_NAME_FOR_TENSE } from "~/dataprovider";
+import { DISPLAY_NAME_FOR_TENSE, PRONOUNS } from "~/dataprovider";
 
 interface TargetWordProps {
   verb: string;
@@ -6,8 +6,6 @@ interface TargetWordProps {
   person: number;
   currentInput: string;
 }
-
-const pronouns = ["Je", "Tu", "Il/Elle", "Nous", "Vous", "Ils/Elles"];
 
 const startsWithVocal = (s: string) => {
   return (
@@ -23,7 +21,7 @@ export default function TargetWord({
   person,
   currentInput,
 }: TargetWordProps) {
-  let intro = pronouns[person];
+  let intro = PRONOUNS[person];
 
   if (person === 0 && startsWithVocal(currentInput)) {
     intro = "J'";

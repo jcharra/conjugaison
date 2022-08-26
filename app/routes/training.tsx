@@ -2,6 +2,7 @@ import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { Form, Link, useLoaderData, useTransition } from "@remix-run/react";
 import { useEffect, useRef, useState, useCallback } from "react";
+import HomeLink from "~/components/HomeLink";
 import SubmitButton from "~/components/SubmitButton";
 import TargetWord from "~/components/TargetWord";
 import VerbCounter from "~/components/VerbCounter";
@@ -114,12 +115,7 @@ export default function Training() {
           disabled={transition.state !== "idle" || !input || input.length === 0}
           caption={transition.state === "idle" ? "Abschicken" : "Warte ..."}
         />
-        <div className="mt-6 text-gray-400">
-          <span>🏠</span>
-          <Link className="text-sm ml-2" to="/">
-            Home
-          </Link>
-        </div>
+        <HomeLink />
       </Form>
     </>
   );

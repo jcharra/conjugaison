@@ -1,6 +1,5 @@
 import { LoaderFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import DisplayStats from "~/components/DisplayStats";
 import LinkButton from "~/components/LinkButton";
 import { getSettingsFromRequest } from "~/dataprovider";
 
@@ -17,13 +16,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export default function Right() {
   const { answer, correct, settings } = useLoaderData();
-  const {
-    unitStep,
-    unitLength,
-    unitErrors,
-    unitErrorsCorrected,
-    untilNoErrors,
-  } = settings;
+  const { unitStep, unitLength, unitErrors, untilNoErrors } = settings;
   const finished =
     unitStep >= unitLength && (unitErrors.length === 0 || !untilNoErrors);
 
@@ -42,15 +35,11 @@ export default function Right() {
           </div>
         </>
       ) : (
-        <h1 className="text-3xl text-green-400">Korrekt</h1>
+        <h1 className="text-3xl text-green-400">Korrekt 👍🏼</h1>
       )}
       {finished ? (
         <>
-          <DisplayStats
-            errors={unitErrors}
-            errorsCorrected={unitErrorsCorrected}
-          />
-          <LinkButton to="/" caption={"Training abschließen"} />
+          <LinkButton to="/result" caption={"Training abschließen"} />
         </>
       ) : (
         <LinkButton to="/training" caption={"Nächstes Verb"} />

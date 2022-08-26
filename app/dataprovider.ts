@@ -21,6 +21,8 @@ export const TENSES = [
   "PLUS_QUE_PARFAIT",
 ];
 
+export const PRONOUNS = ["Je", "Tu", "Il/Elle", "Nous", "Vous", "Ils/Elles"];
+
 export const DISPLAY_NAME_FOR_TENSE: Map<string, string> = new Map([
   ["PRESENT", "Présent"],
   ["FUTUR", "Futur"],
