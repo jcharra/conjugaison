@@ -68,7 +68,7 @@ export default function Settings() {
           onSubmit={(e) => !activeTenses.length && e.preventDefault()}
         >
           <div>
-            <h2 className="text-2xl mb-4">Zeiten</h2>
+            <h2 className="text-2xl mb-4">Temps</h2>
           </div>
           <div>
             {TENSES.map((t) => (
@@ -86,13 +86,16 @@ export default function Settings() {
           </div>
           <div className="my-4">
             <span
-              className="mr-4 underline"
+              className="mr-4 underline cursor-pointer"
               onClick={() => setActiveTenses(TENSES)}
             >
-              Alle wählen
+              Sélectionner tous
             </span>{" "}
-            <span className="underline" onClick={() => setActiveTenses([])}>
-              Alle entfernen
+            <span
+              className="underline cursor-pointer"
+              onClick={() => setActiveTenses([])}
+            >
+              Desélectionner tous
             </span>
           </div>
           <div className="mt-8">
@@ -102,7 +105,7 @@ export default function Settings() {
             <button
               disabled={unitLength === MIN_UNIT_LENGTH}
               className={
-                "bg-blue-600 hover:bg-blue-800 disabled:bg-gray-300 rounded-full px-3 py-1 mr-4 text-white font-extrabold inline cursor-pointer"
+                "bg-blue-400 hover:bg-blue-500 disabled:bg-gray-300 rounded-full px-3 py-1 mr-4 text-white font-extrabold inline cursor-pointer"
               }
               onClick={(e) => {
                 e.preventDefault();
@@ -112,12 +115,12 @@ export default function Settings() {
               -
             </button>
             <div className="font-bold w-21 inline-block text-center">
-              {unitLength} {unitLength === 1 ? "Verb" : "Verben"}
+              {unitLength} {unitLength === 1 ? "verbe" : "verbes"}
             </div>
             <button
               disabled={unitLength === MAX_UNIT_LENGTH}
               className={
-                "bg-blue-600 hover:bg-blue-800 disabled:bg-gray-300 rounded-full px-3 py-1 ml-4 text-white font-extrabold inline cursor-pointer"
+                "bg-blue-400 hover:bg-blue-500 disabled:bg-gray-300 rounded-full px-3 py-1 ml-4 text-white font-extrabold inline cursor-pointer"
               }
               onClick={(e) => {
                 e.preventDefault();
@@ -142,11 +145,14 @@ export default function Settings() {
               onChange={() => setUntilNoErrors((val) => !val)}
             />{" "}
             <label htmlFor="untilNoErrors">
-              Fehler am Ende erneut abfragen
+              Demander à nouveau les erreurs à la fin
             </label>
           </div>
 
-          <SubmitButton disabled={!activeTenses.length} caption={"Speichern"} />
+          <SubmitButton
+            disabled={!activeTenses.length}
+            caption={"Enregistrer"}
+          />
         </Form>
       </div>
     </>

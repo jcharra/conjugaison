@@ -35,7 +35,7 @@ export default function TargetWord({
       </div>
 
       <div>
-        {(person % 3) + 1}. Person {person > 2 ? "Plural" : "Singular"}
+        {(person % 3) + 1}. personne {person > 2 ? "pluriel" : "singulier"}
       </div>
       <div className="font-bold">{intro} ...</div>
     </>

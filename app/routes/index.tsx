@@ -25,15 +25,15 @@ export default function Index() {
     <div className="text-center">
       <h1 className="text-3xl font-bold pt-5">🇫🇷 Conjugaison 🇫🇷</h1>
       <div className="p-5">
-        Trainiere Deine französischen Konjugations-Skills
+        Entraîne tes compétences en conjugaison française
       </div>
       <Form method="post">
-        <SubmitButton caption="Training starten" />
+        <SubmitButton caption="Commencer" />
       </Form>
       <div className="mt-6 text-gray-400">
         <span>⚙</span>
         <Link className="text-sm ml-2" to="/settings">
-          Einstellungen
+          Préférences
         </Link>
       </div>
     </div>

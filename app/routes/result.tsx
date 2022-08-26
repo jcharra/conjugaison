@@ -25,22 +25,23 @@ export default function Result() {
 
   return (
     <div className="text-center">
-      <h1 className="text-2xl">Auswertung</h1>
+      <h1 className="text-2xl">Évaluation</h1>
       <div className="my-2">
-        Du hast{" "}
-        <span className="font-extrabold">{unitErrors.length} Fehler</span>{" "}
-        gemacht.{" "}
-        {errorCount === 0 && <span className="text-green-500">Bravo! 🥳</span>}
+        Tu as fait{" "}
+        <span className="font-extrabold">
+          {errorCount} {errorCount === 1 ? "erreur" : "erreurs"}
+        </span>
+        .{errorCount === 0 && <span className="text-green-500">Bravo! 🥳</span>}
       </div>
       {unitErrorsCorrected.length > 0 && (
         <div>
-          Folgende Fehler hast Du korrigieren können:
+          Tu as pu corriger les erreurs suivantes:
           <ErrorList items={unitErrorsCorrected} />
         </div>
       )}
       {unitErrors.length > 0 && (
         <div>
-          Folgende Verben solltest Du nochmal anschauen:
+          Tu devrais revoir les verbes suivants:
           <ErrorList items={unitErrors} />
         </div>
       )}

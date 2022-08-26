@@ -24,25 +24,25 @@ export default function Right() {
     <div className="text-center">
       {correct !== answer ? (
         <>
-          <h1 className="text-3xl text-red-500">Falsch</h1>
+          <h1 className="text-3xl text-red-500">Faux</h1>
           <div className="mt-2">
-            Deine Antwort:{" "}
+            Ta réponse:{" "}
             <span className="font-extrabold text-red-300">{answer}</span>
           </div>
           <div className="mt-2">
-            Richtig war:{" "}
+            Correct:{" "}
             <span className="font-extrabold text-green-500">{correct}</span>
           </div>
         </>
       ) : (
-        <h1 className="text-3xl text-green-400">Korrekt 👍🏼</h1>
+        <h1 className="text-3xl text-green-400">Correct 👍🏼</h1>
       )}
       {finished ? (
         <>
-          <LinkButton to="/result" caption={"Training abschließen"} />
+          <LinkButton to="/result" caption={"Terminer l'entraînement"} />
         </>
       ) : (
-        <LinkButton to="/training" caption={"Nächstes Verb"} />
+        <LinkButton to="/training" caption={"Verbe suivant"} />
       )}
     </div>
   );
